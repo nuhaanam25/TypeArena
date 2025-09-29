@@ -1,0 +1,837 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>TypeArena - Typing Games & Tests</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+      rel="stylesheet"
+    />
+    <style>
+          :root {
+        --primary-color: #692dc4;
+        --primary-hover: #5824a3;
+        --bg-color: #f9f7ff;
+        --surface-color: #ffffff;
+        --text-color: #3d3b48;
+        --muted-text-color: #6c757d;
+        --border-color: #e0ddeb;
+        --success-color: #28a745;
+        --danger-color: #dc3545;
+        --shadow-color: rgba(105, 45, 196, 0.1);
+        --focus-shadow: rgba(105, 45, 196, 0.15);
+      }
+
+      body.dark-mode {
+        --primary-color: #3b82f6; /* Lighter Blue for contrast */
+        --primary-hover: #60a5fa; /* Even Lighter Blue */
+        --bg-color: #111827;      /* Very Dark Blue/Gray */
+        --surface-color: #1f2937;  /* Dark Slate */
+        --text-color: #f9fafb;    /* Off-White */
+        --muted-text-color: #9ca3af; /* Lighter Gray */
+        --border-color: #374151;    /* Darker Gray */
+        --shadow-color: rgba(0, 0, 0, 0.2);
+      }
+     html {
+        font-size: 17px; /* New: Increases base font size from 16px to 17px */
+        scroll-behavior: smooth;
+        scroll-padding-top: 100px;
+      }
+
+    body {
+        font-family: "Inter", sans-serif; /* Changed from Poppins */
+        background-color: var(--bg-color);
+        color: var(--text-color);
+        margin: 0;
+        padding: 20px;
+        padding-top: 100px; /* Space for fixed navbar */
+        line-height: 1.6;
+        transition: background-color 0.3s ease, color 0.3s ease;
+      }
+
+      .main-container {
+        max-width: 900px;
+        margin: 0 auto;
+      }
+
+      /* --- Professional Navigation Bar --- */
+      .navbar {
+        background-color: var(--surface-color);
+        box-shadow: 0 4px 20px var(--shadow-color);
+        padding: 0 40px;
+        border-radius: 12px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        width: calc(100% - 80px);
+        max-width: 1200px;
+        position: fixed;
+        top: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        z-index: 1000;
+        transition: all 0.3s ease;
+      }
+
+      .nav-logo h1 {
+        font-size: 1.8rem;
+        font-weight: 700;
+        color: var(--primary-color);
+        margin: 0;
+        letter-spacing: -1px; /* Tighter look */
+      }
+
+      .nav-links {
+        list-style: none;
+        display: flex;
+        gap: 35px; /* Increased gap */
+        margin: 0;
+        padding: 0;
+      }
+
+      .nav-links a {
+        color: var(--muted-text-color);
+        text-decoration: none;
+        font-weight: 600;
+        padding: 22px 0; /* Adjusted padding */
+        position: relative;
+        transition: color 0.3s ease;
+      }
+      
+      .nav-links a:hover,
+      .nav-links a.active {
+        color: var(--primary-color);
+      }
+
+      .nav-links a::after {
+        content: '';
+        position: absolute;
+        bottom: 12px; /* Adjusted position */
+        left: 0;
+        width: 100%;
+        height: 3px;
+        background-color: var(--primary-color);
+        transform: scaleX(0);
+        transform-origin: bottom left; /* Consistent origin */
+        transition: transform 0.3s ease;
+      }
+      
+      .nav-links a:hover::after,
+      .nav-links a.active::after {
+        transform: scaleX(1);
+        transform-origin: bottom left;
+      }
+
+      .nav-actions {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+      }
+
+      .nav-toggle {
+        display: none;
+        font-size: 1.5rem;
+        cursor: pointer;
+      }
+
+      .header-btn {
+        background-color: transparent;
+        color: var(--muted-text-color);
+        border: none;
+        font-size: 1.2rem;
+        cursor: pointer;
+        padding: 8px;
+        border-radius: 8px; /* Rounded hover effect */
+        transition: color 0.3s ease, background-color 0.3s ease;
+      }
+      .header-btn:hover {
+        color: var(--primary-color);
+        background-color: var(--bg-color);
+      }
+
+      .card {
+        background-color: var(--surface-color);
+        border-radius: 16px;
+        padding: 30px;
+        box-shadow: 0 8px 30px var(--shadow-color);
+        margin-bottom: 40px;
+        border: 1px solid var(--border-color);
+        transition: all 0.3s ease;
+      }
+      
+      .task-selector, .level-selector {
+        display: flex;
+        justify-content: center;
+        gap: 15px;
+        flex-wrap: wrap;
+        margin-bottom: 30px;
+      }
+
+      .task-btn, .level-btn {
+        background-color: var(--bg-color);
+        color: var(--primary-color);
+        border: 2px solid transparent;
+        padding: 10px 20px;
+        border-radius: 10px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        font-weight: 600;
+        font-size: 1rem;
+      }
+
+    .task-btn.active, .level-btn.active {
+        background-color: var(--primary-color);
+        color: white;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 15px rgba(105, 45, 196, 0.3);
+      }
+
+      .task-btn:hover:not(.active), .level-btn:hover:not(.active) {
+        border-color: var(--primary-color);
+      }
+      
+      #quote, #drill-text, #scrambled-word, #custom-quote {
+        font-size: 1.4rem;
+        margin: 25px 0;
+        padding: 20px;
+        border-radius: 10px;
+        background-color: var(--bg-color);
+        min-height: 80px;
+        color: var(--text-color);
+        font-weight: 500;
+        text-align: center;
+        transition: all 0.3s ease;
+      }
+      
+      textarea {
+        width: 100%;
+        height: 120px;
+        font-size: 1.1rem;
+        padding: 15px;
+        border-radius: 10px;
+        border: 1px solid var(--border-color);
+        outline: none;
+        transition: all 0.3s ease;
+        box-sizing: border-box;
+        background-color: var(--surface-color);
+        color: var(--text-color);
+      }
+
+      textarea:focus {
+        border-color: var(--primary-color);
+        box-shadow: 0 0 0 4px var(--focus-shadow);
+      }
+
+      .stats {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 20px;
+        margin: 30px 0;
+        text-align: center;
+      }
+
+      .stats p {
+        background-color: var(--bg-color);
+        padding: 15px;
+        border-radius: 10px;
+        margin: 0;
+        font-weight: 500;
+        color: var(--muted-text-color);
+        transition: all 0.3s ease;
+      }
+
+      .stats span {
+        font-weight: 700;
+        color: var(--primary-color);
+        display: block;
+        font-size: 1.5rem;
+      }
+      
+      .action-buttons { text-align: center; }
+
+      .action-buttons button, #load-custom-text, #clear-scores-btn {
+        background: var(--primary-color);
+        color: white;
+        border: none;
+        padding: 12px 28px;
+        font-size: 1rem;
+        font-weight: 600;
+        border-radius: 10px;
+        cursor: pointer;
+        margin: 5px;
+        transition: all 0.3s;
+      }
+
+      .action-buttons button:hover, #load-custom-text:hover, #clear-scores-btn:hover {
+        background: var(--primary-hover);
+        transform: translateY(-2px);
+      }
+      
+      #load-custom-text { width: 100%; margin: 15px 0; }
+      
+      #clear-scores-btn {
+          background-color: var(--muted-text-color);
+          display: block;
+          width: fit-content;
+          margin: 20px auto 0;
+      }
+      
+      #clear-scores-btn:hover {
+          background-color: var(--danger-color);
+      }
+
+      .stop-btn { background: var(--danger-color) !important; }
+      .submit-btn { background: var(--success-color) !important; }
+
+      h2 {
+        text-align: center;
+        color: var(--text-color);
+        margin-top: 0;
+        margin-bottom: 25px;
+        font-size: 1.8rem;
+      }
+
+      .instructions-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 25px;
+      }
+
+      .instruction-item h3 {
+        color: var(--primary-color);
+        font-size: 1.2rem;
+        margin-top: 0;
+        margin-bottom: 10px;
+        border-bottom: 2px solid var(--border-color);
+        padding-bottom: 8px;
+      }
+      
+      #finger-placement img {
+        max-width: 100%;
+        height: auto;
+        border-radius: 10px;
+        margin: 15px auto;
+        display: block;
+        border: 1px solid var(--border-color);
+      }
+
+      .instruction-item ul {
+        padding-left: 20px;
+        margin: 0;
+        color: var(--muted-text-color);
+      }
+
+      .scoreboard-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+        gap: 20px;
+        text-align: center;
+      }
+      .score-card {
+        background-color: var(--bg-color);
+        padding: 20px;
+        border-radius: 12px;
+        transition: all 0.3s ease;
+      }
+      .score-value {
+        font-size: 2rem;
+        font-weight: 700;
+        color: var(--primary-color);
+      }
+      .score-label {
+        font-size: 0.9rem;
+        color: var(--muted-text-color);
+        font-weight: 500;
+      }
+
+      /* --- Top Scores Section Styles --- */
+      #top-scores-list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+      }
+      #top-scores-list li {
+        display: flex;
+        justify-content: space-between;
+        padding: 12px 15px;
+        border-radius: 8px;
+        margin-bottom: 10px;
+        background-color: var(--bg-color);
+        font-weight: 500;
+      }
+      #top-scores-list li:first-child {
+        background-color: rgba(105, 45, 196, 0.15); /* Highlight top score */
+        font-weight: 600;
+      }
+      #top-scores-list span {
+        color: var(--primary-color);
+        font-weight: 700;
+      }
+      #top-scores-list .score-date {
+        color: var(--muted-text-color);
+        font-size: 0.9rem;
+      }
+
+      /* FAQ Styles */
+      .faq-item { border-bottom: 1px solid var(--border-color); }
+      .faq-item:last-child { border-bottom: none; }
+      .faq-question {
+        padding: 18px 0;
+        cursor: pointer;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-weight: 600;
+      }
+      .faq-question i { transition: transform 0.3s ease; }
+      .faq-answer {
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height 0.4s ease, padding 0.4s ease;
+        color: var(--muted-text-color);
+      }
+      .faq-item.active .faq-answer { max-height: 200px; padding-bottom: 20px; }
+      .faq-item.active .faq-question i { transform: rotate(180deg); }
+
+      .correct { color: var(--success-color); font-weight: 600; }
+      .wrong { color: var(--danger-color); text-decoration: underline; background-color: rgba(220, 53, 69, 0.1); }
+      .pending { color: var(--muted-text-color); }
+
+      footer {
+        text-align: center;
+        margin-top: 40px;
+        color: var(--muted-text-color);
+      }
+      
+      /* Responsive Navigation */
+      @media (max-width: 850px) {
+        .nav-links {
+            position: absolute;
+            top: 70px;
+            left: 0;
+            width: 100%;
+            background-color: var(--surface-color);
+            flex-direction: column;
+            align-items: center;
+            gap: 0;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s ease-out;
+            border-bottom-left-radius: 12px;
+            border-bottom-right-radius: 12px;
+            box-shadow: 0 10px 20px var(--shadow-color);
+        }
+        .nav-links.active {
+            max-height: 300px;
+        }
+        .nav-links li {
+            width: 100%;
+            text-align: center;
+        }
+        .nav-links a {
+            display: block;
+            padding: 15px 0;
+        }
+        .nav-links a::after {
+            display: none;
+        }
+        .nav-toggle {
+            display: block;
+        }
+        .navbar {
+            padding: 0 20px;
+            width: calc(100% - 40px);
+        }
+        .nav-logo h1 { font-size: 1.5rem; }
+      }
+
+    </style>
+  </head>
+  <body>
+    <nav class="navbar">
+        <div class="nav-logo">
+            <h1>TypeArena</h1>
+        </div>
+        <ul class="nav-links" id="nav-links">
+            <li><a href="#typing-app" class="active">Typing Test</a></li>
+            <li><a href="#how-to-use">How to Use</a></li>
+            <li><a href="#scoreboard">Scoreboard</a></li>
+            <li><a href="#faq">FAQ</a></li>
+        </ul>
+        <div class="nav-actions">
+            <button id="dark-mode-toggle" class="header-btn" title="Toggle Dark Mode"><i class="fas fa-moon"></i></button>
+            <button class="nav-toggle header-btn" id="nav-toggle"><i class="fas fa-bars"></i></button>
+        </div>
+    </nav>
+
+    <div class="main-container">
+      <main>
+        <section class="card" id="typing-app">
+          <div class="task-selector">
+            <button class="task-btn active" onclick="selectTask('typing')">Typing Test</button>
+            <button class="task-btn" onclick="selectTask('unscramble')">Word Unscramble</button>
+            <button class="task-btn" onclick="selectTask('drills')">Speed Drills</button>
+            <button class="task-btn" onclick="selectTask('custom')">Custom Text</button>
+          </div>
+          <div id="typing-task" class="task-content">
+            <div class="level-selector">
+                <button class="level-btn active" onclick="selectLevel('beginner')">Beginner</button>
+                <button class="level-btn" onclick="selectLevel('intermediate')">Intermediate</button>
+                <button class="level-btn" onclick="selectLevel('advanced')">Advanced</button>
+            </div>
+            <p id="quote">Your text will appear here...</p>
+            <textarea id="input" placeholder="Start typing here..."></textarea>
+            <div class="stats">
+              <p>Time<span id="time">0</span>s</p>
+              <p>WPM<span id="wpm">0</span></p>
+              <p>Accuracy<span id="accuracy">0</span>%</p>
+            </div>
+            <div class="action-buttons">
+              <button id="restart"><i class="fas fa-rotate"></i> Restart</button>
+              <button id="stop" class="stop-btn"><i class="fas fa-pause"></i> Stop</button>
+              <button id="submit-typing" class="submit-btn">Submit Test</button>
+            </div>
+          </div>
+          <div id="unscramble-task" class="task-content" style="display: none;">
+            <p id="scrambled-word">Scrambled word...</p>
+            <textarea id="unscramble-input" placeholder="Type the correct word..." rows="1"></textarea>
+            <div class="stats">
+              <p>Score<span id="unscramble-score">0</span></p>
+              <p>Attempts<span id="unscramble-attempts">0</span></p>
+            </div>
+            <div class="action-buttons">
+              <button id="check-unscramble">Check</button>
+              <button id="next-unscramble">Next Word</button>
+            </div>
+          </div>
+          <div id="drills-task" class="task-content" style="display: none;">
+            <p id="drill-text">Drill text will appear here...</p>
+            <textarea id="drill-input" placeholder="Type the phrase here..."></textarea>
+            <div class="stats">
+              <p>Time<span id="drill-time">0</span>s</p>
+              <p>WPM<span id="drill-wpm">0</span></p>
+            </div>
+            <div class="action-buttons">
+              <button id="start-drill">Start Drill</button>
+              <button id="stop-drill" class="stop-btn">Stop</button>
+            </div>
+          </div>
+          <div id="custom-task" class="task-content" style="display: none;">
+            <textarea id="custom-text-input" placeholder="Enter your custom text here and click Load..." rows="4"></textarea>
+            <button id="load-custom-text">Load Text</button>
+            <div id="custom-practice-area" style="display: none;">
+              <p id="custom-quote"></p>
+              <textarea id="custom-input" placeholder="Start typing your custom text..."></textarea>
+              <div class="stats">
+                <p>Time<span id="custom-time">0</span>s</p>
+                <p>WPM<span id="custom-wpm">0</span></p>
+                <p>Accuracy<span id="custom-accuracy">0</span>%</p>
+              </div>
+              <div class="action-buttons">
+                <button id="submit-custom" class="submit-btn">Submit</button>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section id="how-to-use" class="card">
+          <h2>How to Use This Website</h2>
+          <div class="instructions-grid">
+            <div class="instruction-item">
+              <h3>1. Choose a Task</h3>
+              <ul>
+                <li><strong>Typing Test:</strong> Practice with random quotes.</li>
+                <li><strong>Word Unscramble:</strong> Solve jumbled words.</li>
+                <li><strong>Speed Drills:</strong> Type a set phrase against time.</li>
+                <li><strong>Custom Text:</strong> Paste your own text to practice.</li>
+              </ul>
+            </div>
+            <div class="instruction-item">
+              <h3>2. Start Typing</h3>
+              <ul>
+                <li>For tests, simply start typing in the text box to begin the timer.</li>
+                <li>Your progress is tracked in real-time.</li>
+                <li><span class="correct">Green</span> text is correct.</li>
+                <li><span class="wrong">Red</span> text is incorrect.</li>
+              </ul>
+            </div>
+            <div class="instruction-item">
+              <h3>3. See Your Results</h3>
+              <ul>
+                <li>When finished, click **Submit** to see your score.</li>
+                <li>Your WPM and Accuracy are calculated.</li>
+                <li>Your best scores are saved below.</li>
+              </ul>
+            </div>
+          </div>
+        </section>
+
+        <section id="finger-placement" class="card">
+            <h2><i class="fas fa-hand-paper"></i> Proper Finger Placement</h2>
+            <p>To type efficiently, place your fingers on the "home row" keys. The small bumps on the 'F' and 'J' keys will help you find your position without looking.</p>
+            <img src="https://i.imgur.com/g08P8d8.png" alt="Diagram of correct finger placement on a keyboard's home row.">
+            <div class="instructions-grid">
+                <div class="instruction-item">
+                    <h3>Left Hand</h3>
+                    <ul>
+                        <li><strong>Pinky:</strong> A</li><li><strong>Ring:</strong> S</li><li><strong>Middle:</strong> D</li><li><strong>Index:</strong> F</li>
+                    </ul>
+                </div>
+                <div class="instruction-item">
+                    <h3>Right Hand</h3>
+                    <ul>
+                        <li><strong>Index:</strong> J</li><li><strong>Middle:</strong> K</li><li><strong>Ring:</strong> L</li><li><strong>Pinky:</strong> ;</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <section id="scoreboard" class="card">
+          <h2>🏆 Your Scoreboard</h2>
+          <div class="scoreboard-grid">
+            <div class="score-card"><div class="score-value" id="best-wpm">0</div><div class="score-label">Best WPM</div></div>
+            <div class="score-card"><div class="score-value" id="best-accuracy">0%</div><div class="score-label">Best Accuracy</div></div>
+            <div class="score-card"><div class="score-value" id="total-tests">0</div><div class="score-label">Tests Completed</div></div>
+            <div class="score-card"><div class="score-value" id="current-rank">Beginner</div><div class="score-label">Current Rank</div></div>
+          </div>
+        </section>
+
+        <section id="top-scores" class="card">
+            <h2>🏅 Top 5 Scores</h2>
+            <ol id="top-scores-list">
+                </ol>
+            <button id="clear-scores-btn"><i class="fas fa-trash"></i> Clear Scores</button>
+        </section>
+        
+        <section id="faq" class="card">
+          <h2>Frequently Asked Questions</h2>
+          <div class="faq-item"><div class="faq-question"><span>How do I increase my typing speed?</span><i class="fas fa-chevron-down"></i></div><div class="faq-answer"><p>The key is consistent practice. Focus on <strong>accuracy first</strong>, and speed will naturally follow. Use the home row keys (ASDF JKL;) as your base, and make sure to use all your fingers.</p></div></div>
+          <div class="faq-item"><div class="faq-question"><span>How fast should I type?</span><i class="fas fa-chevron-down"></i></div><div class="faq-answer"><p>An average typing speed is around <strong>40 WPM</strong>. A good speed for most jobs is <strong>50-60 WPM</strong>. Professional typists often exceed 70 WPM. Focus on steady improvement.</p></div></div>
+          <div class="faq-item"><div class="faq-question"><span>How is typing speed measured?</span><i class="fas fa-chevron-down"></i></div><div class="faq-answer"><p>It's measured in <strong>WPM (Words Per Minute)</strong>. In standard tests, one "word" is considered to be five characters, including spaces. The formula is: (Total Characters / 5) / Time in Minutes.</p></div></div>
+          <div class="faq-item"><div class="faq-question"><span>Why is it important to take a typing speed test?</span><i class="fas fa-chevron-down"></i></div><div class="faq-answer"><p>It helps you <strong>benchmark your current skill level</strong> and track your improvement over time. Regularly testing yourself can motivate you to practice and identify weaknesses.</p></div></div>
+        </section>
+      </main>
+
+      <footer><p>&copy; 2025 TypeArena - All Rights Reserved</p></footer>
+    </div>
+
+    <script>
+      const beginnerQuotes = ["The cat sat on the mat.", "I like to play in the park.", "The sun is very bright today.", "She has a red ball.", "He runs fast."];
+      const intermediateQuotes = ["The quick brown fox jumps over the lazy dog.", "Practice daily to become a faster typist.", "JavaScript makes the web interactive and fun.", "Typing speed tests improve accuracy and focus."];
+      const advancedQuotes = ["The five boxing wizards jump quickly.", "Programming isn't about what you know; it's about what you can figure out.", "In the middle of difficulty lies opportunity."];
+      
+      let currentLevel = "beginner", bestWPM = 0, bestAccuracy = 0, totalTests = 0;
+      const words = ["javascript", "typing", "keyboard", "practice", "accuracy", "speed", "focus"];
+      let currentWord = "", unscrambleScore = 0, unscrambleAttempts = 0;
+      const drills = ["The quick brown fox jumps over the lazy dog.", "Practice makes perfect."];
+      let currentDrill = "", drillTimer = null, drillTime = 0, drillChars = 0;
+      let customText = "", customTimer = null, customTime = 0, customCorrectChars = 0, customTotalChars = 0, isCustomRunning = false;
+      
+      const quoteElement = document.getElementById("quote"), inputElement = document.getElementById("input"), timeElement = document.getElementById("time"), wpmElement = document.getElementById("wpm"), accuracyElement = document.getElementById("accuracy"), restartBtn = document.getElementById("restart"), stopBtn = document.getElementById("stop");
+      let timer = null, time = 0, isRunning = false, correctChars = 0, totalChars = 0, currentQuote = "";
+
+      function selectTask(task) {
+        document.querySelectorAll(".task-content").forEach(el => el.style.display = "none");
+        document.querySelectorAll(".task-btn").forEach(el => el.classList.remove("active"));
+        document.getElementById(task + "-task").style.display = "block";
+        document.querySelector(`.task-btn[onclick="selectTask('${task}')"]`).classList.add("active");
+        if (task === 'typing') resetTyping(); else if (task === 'unscramble') resetUnscramble(); else if (task === 'drills') resetDrills(); else if (task === 'custom') resetCustom();
+      }
+
+      function selectLevel(level) {
+          currentLevel = level;
+          document.querySelectorAll(".level-btn").forEach(btn => btn.classList.remove("active"));
+          document.querySelector(`.level-btn[onclick="selectLevel('${level}')"]`).classList.add("active");
+          resetTyping();
+      }
+
+      function setQuote() {
+        let quotes;
+        if (currentLevel === 'beginner') quotes = beginnerQuotes; else if (currentLevel === 'intermediate') quotes = intermediateQuotes; else quotes = advancedQuotes;
+        currentQuote = quotes[Math.floor(Math.random() * quotes.length)];
+        displayQuote();
+      }
+
+      function displayQuote(typed = "") {
+        let html = "";
+        for (let i = 0; i < currentQuote.length; i++) {
+          html += i < typed.length ? (typed[i] === currentQuote[i] ? `<span class="correct">${currentQuote[i]}</span>` : `<span class="wrong">${currentQuote[i]}</span>`) : `<span class="pending">${currentQuote[i]}</span>`;
+        }
+        quoteElement.innerHTML = html;
+      }
+
+      function startTimer() { if (!isRunning) { isRunning = true; timer = setInterval(() => { time++; timeElement.textContent = time; calculateWPM(); }, 1000); } }
+      function calculateWPM() { let words = totalChars / 5, minutes = time / 60; wpmElement.textContent = minutes > 0 ? Math.round(words / minutes) : 0; }
+      function calculateAccuracy() { accuracyElement.textContent = totalChars > 0 ? Math.round((correctChars / totalChars) * 100) : 0; }
+      function resetTyping() { clearInterval(timer); time = 0; isRunning = false; correctChars = 0; totalChars = 0; inputElement.value = ""; inputElement.disabled = false; timeElement.textContent = "0"; wpmElement.textContent = "0"; accuracyElement.textContent = "0"; setQuote(); }
+      
+      function updateScoreboard() { 
+          document.getElementById("best-wpm").textContent = bestWPM; 
+          document.getElementById("best-accuracy").textContent = bestAccuracy + "%"; 
+          document.getElementById("total-tests").textContent = totalTests; 
+          let rank = "Beginner"; 
+          if (bestWPM >= 60) rank = "Pro"; else if (bestWPM >= 40) rank = "Advanced"; else if (bestWPM >= 20) rank = "Intermediate"; 
+          document.getElementById("current-rank").textContent = rank; 
+      }
+      
+      // --- Top Scores Logic (Without JSON) ---
+      function saveTopScore(wpm, accuracy) {
+          const scoresString = localStorage.getItem('typeArenaTopScores') || '';
+          let scores = [];
+          if (scoresString) {
+              scores = scoresString.split('|').map(s => {
+                  const parts = s.split(',');
+                  return { wpm: parseInt(parts[0]), accuracy: parseInt(parts[1]), date: parts[2] };
+              });
+          }
+
+          const newScore = {
+              wpm: wpm,
+              accuracy: accuracy,
+              date: new Date().toLocaleDateString()
+          };
+
+          scores.push(newScore);
+          scores.sort((a, b) => b.wpm - a.wpm); // Sort by WPM descending
+          const top5Scores = scores.slice(0, 5); // Keep only the top 5
+          
+          // Convert array of objects back to custom string format
+          const newScoresString = top5Scores.map(s => `${s.wpm},${s.accuracy},${s.date}`).join('|');
+          localStorage.setItem('typeArenaTopScores', newScoresString);
+          displayTopScores();
+      }
+      
+      function displayTopScores() {
+          const scoresString = localStorage.getItem('typeArenaTopScores') || '';
+          const listElement = document.getElementById('top-scores-list');
+          listElement.innerHTML = ''; // Clear previous list
+
+          if (!scoresString) {
+              listElement.innerHTML = '<li>No scores recorded yet. Complete a test!</li>';
+              return;
+          }
+
+          const scores = scoresString.split('|').map(s => {
+              const parts = s.split(',');
+              return { wpm: parts[0], accuracy: parts[1], date: parts[2] };
+          });
+          
+          scores.forEach(score => {
+              const li = document.createElement('li');
+              li.innerHTML = `
+                  <div><span>${score.wpm}</span> WPM / <span>${score.accuracy}%</span> Acc</div>
+                  <div class="score-date">${score.date}</div>
+              `;
+              listElement.appendChild(li);
+          });
+      }
+
+      document.getElementById('clear-scores-btn').addEventListener('click', () => {
+          if (confirm('Are you sure you want to clear all your top scores? This cannot be undone.')) {
+              localStorage.removeItem('typeArenaTopScores');
+              displayTopScores();
+          }
+      });
+
+      function processTestResult(wpm, accuracy) {
+          if (wpm > bestWPM) { bestWPM = wpm; localStorage.setItem("typeArenaBestWPM", bestWPM); }
+          if (accuracy > bestAccuracy) { bestAccuracy = accuracy; localStorage.setItem("typeArenaBestAccuracy", bestAccuracy); }
+          totalTests++; localStorage.setItem("typeArenaTotalTests", totalTests);
+          updateScoreboard();
+          saveTopScore(wpm, accuracy); // Save to top scores list
+      }
+
+      // --- Unscramble, Drills, and Custom Text Logic (Mostly Unchanged) ---
+      function scrambleWord(word) { return word.split('').sort(() => 0.5 - Math.random()).join(''); }
+      function setUnscrambleWord() { currentWord = words[Math.floor(Math.random() * words.length)]; document.getElementById("scrambled-word").textContent = scrambleWord(currentWord); document.getElementById("unscramble-input").value = ""; }
+      function checkUnscramble() { const input = document.getElementById("unscramble-input").value.trim().toLowerCase(); unscrambleAttempts++; document.getElementById("unscramble-attempts").textContent = unscrambleAttempts; if (input === currentWord) { unscrambleScore++; document.getElementById("unscramble-score").textContent = unscrambleScore; alert("Correct! Well done."); nextUnscramble(); } else { alert("Try again!"); } }
+      function nextUnscramble() { setUnscrambleWord(); }
+      function resetUnscramble() { unscrambleScore = 0; unscrambleAttempts = 0; document.getElementById("unscramble-score").textContent = "0"; document.getElementById("unscramble-attempts").textContent = "0"; setUnscrambleWord(); }
+      
+      function setDrill() { currentDrill = drills[Math.floor(Math.random() * drills.length)]; document.getElementById("drill-text").textContent = currentDrill; document.getElementById("drill-input").value = ""; drillChars = 0; }
+      function startDrill() { if (drillTimer) clearInterval(drillTimer); drillTime = 0; drillChars = 0; document.getElementById("drill-time").textContent = "0"; document.getElementById("drill-wpm").textContent = "0"; document.getElementById("drill-input").disabled = false; drillTimer = setInterval(() => { drillTime++; document.getElementById("drill-time").textContent = drillTime; let wpm = drillTime > 0 ? Math.round((drillChars / 5) / (drillTime / 60)) : 0; document.getElementById("drill-wpm").textContent = wpm; }, 1000); }
+      function stopDrill() { if (drillTimer) clearInterval(drillTimer); drillTimer = null; document.getElementById("drill-input").disabled = true; }
+      function resetDrills() { stopDrill(); drillTime = 0; drillChars = 0; document.getElementById("drill-time").textContent = "0"; document.getElementById("drill-wpm").textContent = "0"; document.getElementById("drill-input").disabled = false; setDrill(); }
+      
+      function loadCustomText() { const text = document.getElementById("custom-text-input").value.trim(); if (text.length === 0) { alert("Please enter some text to practice!"); return; } customText = text; document.getElementById("custom-quote").textContent = customText; document.getElementById("custom-practice-area").style.display = "block"; resetCustom(); }
+      function startCustomTimer() { if (!isCustomRunning) { isCustomRunning = true; customTimer = setInterval(() => { customTime++; document.getElementById("custom-time").textContent = customTime; calculateCustomWPM(); }, 1000); } }
+      function calculateCustomWPM() { let wpm = customTime > 0 ? Math.round((customTotalChars / 5) / (customTime / 60)) : 0; document.getElementById("custom-wpm").textContent = wpm; }
+      function calculateCustomAccuracy() { document.getElementById("custom-accuracy").textContent = customTotalChars > 0 ? Math.round((customCorrectChars / customTotalChars) * 100) : 0; }
+      function displayCustomQuote(typed = "") { let html = ""; for (let i = 0; i < customText.length; i++) { html += i < typed.length ? (typed[i] === customText[i] ? `<span class="correct">${customText[i]}</span>` : `<span class="wrong">${customText[i]}</span>`) : `<span class="pending">${customText[i]}</span>`; } document.getElementById("custom-quote").innerHTML = html; }
+      function resetCustom() { clearInterval(customTimer); customTime = 0; isCustomRunning = false; customCorrectChars = 0; customTotalChars = 0; document.getElementById("custom-input").value = ""; document.getElementById("custom-input").disabled = false; document.getElementById("custom-time").textContent = "0"; document.getElementById("custom-wpm").textContent = "0"; document.getElementById("custom-accuracy").textContent = "0"; displayCustomQuote(); }
+      
+      // FAQ Accordion Logic
+      document.querySelectorAll('.faq-question').forEach(item => { item.addEventListener('click', () => { item.parentElement.classList.toggle('active'); }); });
+
+      // Event Listeners
+      inputElement.addEventListener("keydown", startTimer);
+      inputElement.addEventListener("input", () => { const typed = inputElement.value; totalChars = typed.length; correctChars = 0; for (let i = 0; i < typed.length; i++) { if (typed[i] === currentQuote[i]) correctChars++; } calculateAccuracy(); displayQuote(typed); });
+      restartBtn.addEventListener("click", () => resetTyping());
+      document.getElementById("submit-typing").addEventListener("click", () => { const typed = inputElement.value; if (typed !== currentQuote) return alert("Please complete typing!"); clearInterval(timer); isRunning = false; inputElement.disabled = true; const wpm = time > 0 ? Math.round(totalChars / 5 / (time / 60)) : 0; const accuracy = totalChars > 0 ? Math.round((correctChars / totalChars) * 100) : 0; processTestResult(wpm, accuracy); alert(`Test Complete!\nWPM: ${wpm}\nAccuracy: ${accuracy}%`); });
+      stopBtn.addEventListener("click", () => { clearInterval(timer); isRunning = false; inputElement.disabled = true; });
+      document.getElementById("check-unscramble").addEventListener("click", checkUnscramble);
+      document.getElementById("next-unscramble").addEventListener("click", nextUnscramble);
+      document.getElementById("start-drill").addEventListener("click", startDrill);
+      document.getElementById("stop-drill").addEventListener("click", stopDrill);
+      document.getElementById("drill-input").addEventListener("input", () => { drillChars = document.getElementById("drill-input").value.length; });
+      document.getElementById("load-custom-text").addEventListener("click", loadCustomText);
+      document.getElementById("submit-custom").addEventListener("click", () => { let typed = document.getElementById("custom-input").value; if (typed !== customText) return alert("Please complete typing the text!"); clearInterval(customTimer); isCustomRunning = false; document.getElementById("custom-input").disabled = true; let wpm = customTime > 0 ? Math.round((customTotalChars / 5) / (customTime / 60)) : 0; let accuracy = customTotalChars > 0 ? Math.round((customCorrectChars / customTotalChars) * 100) : 0; processTestResult(wpm, accuracy); alert(`Custom text practice completed!\nTime: ${customTime}s\nWPM: ${wpm}\nAccuracy: ${accuracy}%`); });
+      document.getElementById("custom-input").addEventListener("keydown", startCustomTimer);
+      document.getElementById("custom-input").addEventListener("input", () => { const typed = document.getElementById("custom-input").value; customTotalChars = typed.length; customCorrectChars = 0; for (let i = 0; i < typed.length; i++) { if (typed[i] === customText[i]) customCorrectChars++; } calculateCustomAccuracy(); displayCustomQuote(typed); });
+      
+      // Responsive Nav Toggle
+      document.getElementById('nav-toggle').addEventListener('click', () => { document.getElementById('nav-links').classList.toggle('active'); });
+
+      // Dark Mode Logic
+      const darkModeToggle = document.getElementById('dark-mode-toggle');
+      function setDarkMode(isDark) {
+          if (isDark) {
+              document.body.classList.add('dark-mode');
+              darkModeToggle.innerHTML = `<i class="fas fa-sun"></i>`;
+              localStorage.setItem('typeArenaDarkMode', 'true');
+          } else {
+              document.body.classList.remove('dark-mode');
+              darkModeToggle.innerHTML = `<i class="fas fa-moon"></i>`;
+              localStorage.setItem('typeArenaDarkMode', 'false');
+          }
+      }
+      darkModeToggle.addEventListener('click', () => setDarkMode(!document.body.classList.contains('dark-mode')));
+
+      // --- Professional Navigation: Active Link on Scroll ---
+      const sections = document.querySelectorAll('section[id]');
+      const navLinks = document.querySelectorAll('.nav-links a');
+      const observer = new IntersectionObserver((entries) => {
+          entries.forEach(entry => {
+              if (entry.isIntersecting) {
+                  navLinks.forEach(link => {
+                      link.classList.remove('active');
+                      if (link.getAttribute('href').substring(1) === entry.target.id) {
+                          link.classList.add('active');
+                      }
+                  });
+              }
+          });
+      }, { rootMargin: '-30% 0px -70% 0px' }); // Trigger when section is in the middle 40% of the viewport
+      sections.forEach(section => observer.observe(section));
+
+      // Initial Load
+      bestWPM = parseInt(localStorage.getItem("typeArenaBestWPM")) || 0;
+      bestAccuracy = parseInt(localStorage.getItem("typeArenaBestAccuracy")) || 0;
+      totalTests = parseInt(localStorage.getItem("typeArenaTotalTests")) || 0;
+      if (localStorage.getItem('typeArenaDarkMode') === 'true') { setDarkMode(true); }
+
+      setQuote();
+      setUnscrambleWord();
+      setDrill();
+      updateScoreboard();
+      displayTopScores(); // Display top scores on load
+    </script>
+  </body>
+</html>
